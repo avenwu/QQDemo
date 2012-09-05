@@ -3,5 +3,5 @@ QQDemo
 
 Imitate interface of QQ for android
 
-![Screenshot](https://github.com/avenwu/QQDemo/raw/master/qqdemo.png)
-![Screenshot](https://github.com/avenwu/QQDemo/raw/master/qqdemo2.png)
+![Screenshot](https://raw.github.com/avnewu/QQDemo/master/qqdemo.png)
+![Screenshot](https://raw.github.com/avnewu/QQDemo/master/qqdemo2.png)
