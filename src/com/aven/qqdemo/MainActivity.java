@@ -3,16 +3,14 @@ package com.aven.qqdemo;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.demo.R;
-
-import android.R.integer;
-import android.app.Activity;
 import android.content.res.Resources;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.v4.view.PagerAdapter;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.DisplayMetrics;
@@ -25,16 +23,19 @@ import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.demo.R;
+
 /**
  * 参考原作者D.Winter基础，
  * 
- * @author D.Winter
+ * @author avenwu
+ * iamavenwu@gmail.com
  * 
  */
-public class MainActivity extends Activity {
+public class MainActivity extends FragmentActivity {
     private static final String TAG = "MainActivity";
     private ViewPager mPager;
-    private List<View> listViews;
+    private ArrayList<Fragment> fragmentsList;
     private ImageView ivBottomLine;
     private TextView tvTabActivity, tvTabGroups, tvTabFriends, tvTabChat;
 
@@ -71,13 +72,21 @@ public class MainActivity extends Activity {
 
     private void InitViewPager() {
         mPager = (ViewPager) findViewById(R.id.vPager);
-        listViews = new ArrayList<View>();
+        fragmentsList = new ArrayList<Fragment>();
         LayoutInflater mInflater = getLayoutInflater();
-        listViews.add(mInflater.inflate(R.layout.lay1, null));
-        listViews.add(mInflater.inflate(R.layout.lay2, null));
-        listViews.add(mInflater.inflate(R.layout.lay3, null));
-        listViews.add(mInflater.inflate(R.layout.lay1, null));
-        mPager.setAdapter(new MyPagerAdapter(listViews));
+        View activityView = mInflater.inflate(R.layout.lay1, null);
+
+        Fragment activityfragment = TestFragment.newInstance("Hello Activity.");
+        Fragment groupFragment = TestFragment.newInstance("Hello Group.");
+        Fragment friendsFragment=TestFragment.newInstance("Hello Friends.");
+        Fragment chatFragment=TestFragment.newInstance("Hello Chat.");
+
+        fragmentsList.add(activityfragment);
+        fragmentsList.add(groupFragment);
+        fragmentsList.add(friendsFragment);
+        fragmentsList.add(chatFragment);
+        
+        mPager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager(), fragmentsList));
         mPager.setCurrentItem(0);
         mPager.setOnPageChangeListener(new MyOnPageChangeListener());
     }
@@ -95,52 +104,6 @@ public class MainActivity extends Activity {
         position_one = (int) (screenW / 4.0);
         position_two = position_one * 2;
         position_three = position_one * 3;
-    }
-
-    public class MyPagerAdapter extends PagerAdapter {
-        public List<View> mListViews;
-
-        public MyPagerAdapter(List<View> mListViews) {
-            this.mListViews = mListViews;
-        }
-
-        @Override
-        public void destroyItem(View arg0, int arg1, Object arg2) {
-            ((ViewPager) arg0).removeView(mListViews.get(arg1));
-        }
-
-        @Override
-        public void finishUpdate(View arg0) {
-        }
-
-        @Override
-        public int getCount() {
-            return mListViews.size();
-        }
-
-        @Override
-        public Object instantiateItem(View arg0, int arg1) {
-            ((ViewPager) arg0).addView(mListViews.get(arg1), 0);
-            return mListViews.get(arg1);
-        }
-
-        @Override
-        public boolean isViewFromObject(View arg0, Object arg1) {
-            return arg0 == (arg1);
-        }
-
-        @Override
-        public void restoreState(Parcelable arg0, ClassLoader arg1) {
-        }
-
-        @Override
-        public Parcelable saveState() {
-            return null;
-        }
-
-        @Override
-        public void startUpdate(View arg0) {
-        }
     }
 
     public class MyOnClickListener implements View.OnClickListener {
